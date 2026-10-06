@@ -57,7 +57,26 @@ class GridProblem(Problem):
         # 4. Add valid actions to the list.
         # 5. Return the list.
 
-        pass
+        x, y = state
+        actions = []
+        
+        # can we move up?
+        if y < GRID_SIZE - 1:
+            actions.append("DOWN")
+        # Can we move down?
+        if y < GRID_SIZE - 1:
+            actions.append("DOWN")
+        
+        # Can we move left?
+        if x > 0:
+            actions.append("LEFT")
+        
+        # Can we move right?
+        if x < GRID_SIZE - 1:
+            actions.append("RIGHT")
+        
+        return actions
+
 
     def result(self, state, action):
         """
