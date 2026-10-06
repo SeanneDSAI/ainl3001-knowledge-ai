@@ -102,22 +102,10 @@ def count_conflicts(board):
 # --------------------------------------------------
 
 def generate_neighbours(problem, board):
-    """
-    Generate all neighbouring boards.
-
-    Use the Problem interface introduced this week:
-
-        problem.actions(state)
-        problem.result(state, action)
-    """
-
     neighbours = []
 
-    # TODO:
-    #
-    # 1. Ask the problem for the available actions.
-    # 2. Apply each action.
-    # 3. Add the resulting state to neighbours.
+    for action in problem.actions(board):
+        neighbours.append(problem.result(board, action))
 
     return neighbours
 
@@ -129,35 +117,22 @@ def generate_neighbours(problem, board):
 # --------------------------------------------------
 
 def hill_climbing(problem, start_board):
-    """
-    Use Hill Climbing to reduce the number
-    of conflicts.
-
-    Algorithm:
-
-        current = start state
-
-        repeat:
-
-            generate neighbours
-
-            find the neighbour with the
-            lowest conflict count
-
-            if the neighbour is not better:
-                stop
-
-            otherwise:
-                move to the neighbour
-
-        return current
-    """
-
     current = start_board
+    current_cost = count_conflicts(current)
 
-    # TODO
+    while True:
+        neighbours = generate_neighbours(problem, current)
 
-    pass
+        best = min(neighbours, key=count_conflicts)
+        best_cost = count_conflicts(best)
+
+        if best_cost >= current_cost:
+            break
+
+        current = best
+        current_cost = best_cost
+
+    return current
 
 
 # --------------------------------------------------
@@ -165,24 +140,35 @@ def hill_climbing(problem, start_board):
 # --------------------------------------------------
 
 def simulated_annealing(problem, start_board):
-    """
-    Use Simulated Annealing to search for
-    a solution.
-
-    Unlike Hill Climbing, Simulated Annealing
-    can sometimes accept a worse state.
-
-    This can help escape local minima.
-    """
-
     current = start_board
+    current_cost = count_conflicts(current)
+
+    best = current
+    best_cost = current_cost
 
     temperature = 10.0
     cooling_rate = 0.95
+    steps_per_temperature = 100
 
-    # TODO
+    while temperature > 0.01 and best_cost > 0:
+        for _ in range(steps_per_temperature):
+            neighbour = random.choice(generate_neighbours(problem, current))
+            neighbour_cost = count_conflicts(neighbour)
+            delta = neighbour_cost - current_cost
 
-    pass
+            if delta < 0 or random.random() < math.exp(-delta / temperature):
+                current = neighbour
+                current_cost = neighbour_cost
+
+                if current_cost < best_cost:
+                    best = current
+                    best_cost = current_cost
+                    if best_cost == 0:
+                        return best
+
+        temperature *= cooling_rate
+
+    return best
 
 
 # --------------------------------------------------
