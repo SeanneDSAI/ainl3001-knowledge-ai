@@ -77,14 +77,11 @@ class GridProblem(Problem):
         x, y = state
 
         if action == "UP":
-            return (x, y - 1)
-
+            return (x, y - 1        
         if action == "DOWN":
-            return (x, y + 1)
-
+            return (x, y + 1        
         if action == "LEFT":
-            return (x - 1, y)
-
+            return (x - 1, y        
         if action == "RIGHT":
             return (x + 1, y)
 

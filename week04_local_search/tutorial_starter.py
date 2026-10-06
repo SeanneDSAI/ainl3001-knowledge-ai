@@ -171,6 +171,7 @@ test_state = (2, 2)
 
 print(
     f"\nActions from {test_state}:"
+)
 
 actions = problem.actions(test_state)
 
@@ -179,6 +180,7 @@ print(actions)
 print("\nResults of those actions:")
 
 for action in actions:
+
     new_state = problem.result(
         test_state,
         action
@@ -189,7 +191,7 @@ for action in actions:
         "->",
         new_state
     )
-)
+
 
 # --------------------------------------------------
 # REFLECTION QUESTIONS
