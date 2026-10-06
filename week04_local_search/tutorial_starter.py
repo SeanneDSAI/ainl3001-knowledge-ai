@@ -59,7 +59,7 @@ class GridProblem(Problem):
 
         x, y = state
         actions = []
-        
+
         # can we move up?
         if y < GRID_SIZE - 1:
             actions.append("DOWN")
@@ -96,7 +96,22 @@ class GridProblem(Problem):
         # 2. Check which action was requested.
         # 3. Return the resulting state.
 
-        pass
+        x, y = state
+
+        if action == "UP":
+            return (x, y - 1)
+        
+        if action == "DOWN":
+            return (x, y + 1)
+        
+        if action == "LEFT":
+            return (x - 1, y)
+        
+        if action == "RIGHT":
+            return (x + 1, y)
+
+        raise ValueError(f"Unknown action: {action}")
+    
 
 
 # --------------------------------------------------
