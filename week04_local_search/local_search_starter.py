@@ -121,6 +121,8 @@ def generate_neighbours(problem, board):
 
     return neighbours
 
+#hi
+
 
 # --------------------------------------------------
 # TASK 3 — HILL CLIMBING
