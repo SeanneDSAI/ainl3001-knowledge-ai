@@ -45,17 +45,9 @@ example_board = [0, 1, 2, 3]
 print("Manual Exploration Board:")
 print(example_board)
 
-print(
-    "\nEach list position represents a column."
-)
-
-print(
-    "Each value represents the row containing the queen."
-)
-
-print(
-    "\nQuestion: How many conflicts exist on this board?"
-)
+print("\nEach list position represents a column.")
+print("Each value represents the row containing the queen.")
+print("\nQuestion: How many conflicts exist on this board?")
 
 
 # --------------------------------------------------
@@ -73,28 +65,17 @@ def count_conflicts(board):
 
         conflict count = 0
     """
+    conflicts = 0
+    n = len(board)
 
-    # TODO:
-    # Compare each queen with every queen
-    # that comes after it.
-    #
-    # Queens conflict when they are:
-    #
-    #   1. in the same row
-    #   2. on the same diagonal
+    for i in range(n):
+        for j in range(i + 1, n):
+            if board[i] == board[j]:
+                conflicts += 1
+            elif abs(board[i] - board[j]) == abs(i - j):
+                conflicts += 1
 
-    def count_conflicts(board):
-        conflicts = 0
-        n = len(board)
-
-        for i in range(n):
-            for j in range(i + 1, n):
-                if board[i] == board[j]:
-                    conflicts += 1
-                elif abs(board[i] - board[j]) == abs(i - j):
-                    conflicts += 1
-
-        return conflicts
+    return conflicts
 
 
 # --------------------------------------------------
@@ -108,8 +89,6 @@ def generate_neighbours(problem, board):
         neighbours.append(problem.result(board, action))
 
     return neighbours
-
-
 
 
 # --------------------------------------------------
@@ -177,36 +156,41 @@ def simulated_annealing(problem, start_board):
 
 if __name__ == "__main__":
 
-    board = [
-        random.randint(0, N - 1)
-        for _ in range(N)
-    ]
-
+    # --- Tasks 1 and 2: basic checks ---
+    board = [random.randint(0, N - 1) for _ in range(N)]
     problem = QueensProblem(board)
 
     print("\nRandom Board")
     print(board)
 
     print("\nConflicts")
-    print(
-        count_conflicts(board)
-    )
+    print(count_conflicts(board))
 
     print("\nPossible Actions")
-
     actions = problem.actions(board)
-
-    print(
-        f"{len(actions)} actions available"
-    )
+    print(f"{len(actions)} actions available")
 
     print("\nNeighbours")
+    neighbours = generate_neighbours(problem, board)
+    print(f"{len(neighbours)} neighbours generated")
 
-    neighbours = generate_neighbours(
-        problem,
-        board
-    )
+    # --- Task 3: one Hill Climbing run ---
+    print("\nHill Climbing result")
+    result = hill_climbing(problem, board)
+    print(result, "conflicts:", count_conflicts(result))
 
-    print(
-        f"{len(neighbours)} neighbours generated"
-    )
+    # --- Task 4 (experiment): five Hill Climbing runs ---
+    print("\nTask 4: Hill Climbing x5")
+    for attempt in range(1, 6):
+        start = [random.randint(0, N - 1) for _ in range(N)]
+        final = hill_climbing(QueensProblem(start), start)
+        print(f"Attempt {attempt}: final cost = {count_conflicts(final)}")
+
+    # --- Task 5.1: Hill Climbing vs Simulated Annealing (same start) ---
+    print("\nTask 5.1: Hill Climbing vs Simulated Annealing")
+    start = [random.randint(0, N - 1) for _ in range(N)]
+    hc = hill_climbing(QueensProblem(start), start)
+    sa = simulated_annealing(QueensProblem(start), start)
+    print("Start:           ", start)
+    print("Hill Climbing:   ", hc, "cost", count_conflicts(hc))
+    print("Simulated Anneal:", sa, "cost", count_conflicts(sa))
