@@ -90,15 +90,25 @@ def select_unassigned_variable(assignment):
     choose the unassigned region with the FEWEST currently legal
     colours. Break ties by keeping the first region in variables.
     """
-    # TASK 3 TODO:
-    # Return the first variable not in assignment, or None if all
-    # variables have been assigned.
-    #
-    # TASK 5 TODO (after backtracking works):
-    # For each unassigned variable, temporarily try each colour,
-    # check is_valid_assignment(), and undo the temporary assignment.
-    # Count legal colours and choose the variable with the fewest.
-    pass
+    best_variable = None
+    fewest_legal_colours = float("inf")
+    
+    for variable in variables:
+        if variable in assignment:
+            continue
+    
+        legal_colours = 0
+        for colour in domains[variable]:
+            assignment[variable] = colour
+            if is_valid_assignment(assignment):
+                legal_colours += 1
+            del assignment[variable]
+    
+        if legal_colours < fewest_legal_colours:
+            fewest_legal_colours = legal_colours
+            best_variable = variable
+    
+    return best_variable
 
 
 # --------------------------------------------------
