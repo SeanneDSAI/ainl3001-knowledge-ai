@@ -186,6 +186,11 @@ if __name__ == "__main__":
     print("\nPossible complete assignments:", 3 ** len(variables))
     print("\nReflection:")
     print("1. What causes backtracking?")
+    print("   Answer: A partial assignment breaks a constraint (two neighbours get the same colour), so the search undoes its last colour choice and tries another.")
     print("2. Why can backtracking be faster than brute force?")
+    print("   Answer: It drops a partial assignment the moment it is invalid, skipping every complete assignment that would have extended it, instead of testing all 729.")
     print("3. Why might MRV reduce search?")
+    print("   Answer: MRV colours the most constrained region first (fewest legal colours), so dead ends appear earlier and far fewer branches are explored.")
     print("4. How could this model represent timetabling?")
+    print("   Answer: Variables are the classes, each domain is the possible (room, time-slot) pairs, and constraints forbid clashes like the same room and time or a lecturer double-booked.")
+
