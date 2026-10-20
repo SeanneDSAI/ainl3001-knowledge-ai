@@ -30,7 +30,9 @@ print(r"""
        3    5  2    9
 """)
 print("Which values do the two MIN nodes return?")
+print("   Answer: Left MIN = min(3, 5) = 3; right MIN = min(2, 9) = 2.")
 print("Which branch should MAX choose, and why?")
+print("   Answer: The left branch (value 3). MAX takes the larger of the two MIN results, because it assumes MIN will minimise each branch.")
 
 # BOARD — X plays next (three X marks and two O marks).
 # Board positions are numbered 0 to 8, left to right, top to bottom.
@@ -258,6 +260,10 @@ if __name__ == "__main__":
 
     print("\nReflection:")
     print("1. Why is Tic-Tac-Toe a search problem?")
+    print("   Answer: Each board is a state and each move leads to a new state, so you search the tree of possible move sequences for one that reaches a winning or non-losing terminal state.")
     print("2. Why does Minimax assume an optimal opponent?")
+    print("   Answer: It picks the move with the best guaranteed result by assuming the opponent always replies to minimise your score, so the plan is safe even against perfect play.")
     print("3. What is the purpose of a utility function?")
+    print("   Answer: It gives terminal states a number (+1, -1, 0) so the search has concrete values to compare and pass back up the tree to score each move.")
     print("4. What happens as games become larger?")
+    print("   Answer: The branching factor and depth grow, so the tree explodes and full Minimax gets too slow, which is why we use alpha-beta pruning, depth limits and heuristics.")
