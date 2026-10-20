@@ -53,8 +53,12 @@ WINNING_LINES = [
 
 def print_board(state):
     """Display the nine cells as a 3-by-3 board."""
-    # TODO: Print three rows of three cells.
-    pass
+    for row in range(3):
+            cells = state[row * 3: row * 3 + 3]
+            print(" " + " | ".join(cells))
+            if row < 2:
+                print("---+---+---")
+
 
 
 # --------------------------------------------------
@@ -63,8 +67,7 @@ def print_board(state):
 
 def available_moves(state):
     """Return indices of empty cells (0 through 8)."""
-    # TODO: Find every position containing " ".
-    pass
+    return [i for i, cell in enumerate(state) if cell == ""]
 
 
 # --------------------------------------------------
@@ -76,9 +79,10 @@ def make_move(state, move, player):
 
     Assume move is legal. Do not modify the input board.
     """
-    # TODO: Copy the board and place the player's mark.
-    pass
-
+    
+    new_state = list(state)             # copy so the original ios unchanged
+    new_state[move] = player
+    return new_state
 
 # --------------------------------------------------
 # TASK 2 — WINNER
@@ -86,8 +90,11 @@ def make_move(state, move, player):
 
 def check_winner(state):
     """Return 'X', 'O' or None by checking all winning lines."""
-    # TODO: Check each (a, b, c) in WINNING_LINES.
-    pass
+    for a, b, c in WINNING_LINES:
+        if state[a] != " " and state[a] == state[b] == state[c]:
+            return state[a]
+    return None
+
 
 
 # --------------------------------------------------
@@ -96,8 +103,7 @@ def check_winner(state):
 
 def is_terminal(state):
     """Return True for a win or a full board (draw)."""
-    # TODO: Detect a winner OR no remaining empty cells.
-    pass
+    return check_winner(state) is not None or " " not in state
 
 
 # --------------------------------------------------
@@ -109,8 +115,12 @@ def utility(state):
 
     Minimax calls this only at terminal states.
     """
-    # TODO: Use check_winner() and return +1, -1 or 0.
-    pass
+    winner = check_winner(state)
+    if winner == "X":
+        return 1
+    if winner == "0":
+        return -1
+    return 0
 
 
 # --------------------------------------------------
