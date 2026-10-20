@@ -133,14 +133,23 @@ def minimax(state, maximizing, counter):
     maximizing=True means X moves next; False means O moves next.
     counter is a one-item dictionary: {'nodes': 0}.
     """
-    # TODO:
-    # 1. Count this node: counter["nodes"] += 1.
-    # 2. If terminal, return utility(state).
-    # 3. For X (MAX), recursively choose the highest score.
-    # 4. For O (MIN), recursively choose the lowest score.
-    # Use make_move() to avoid changing the original board.
-    pass
+    counter["nodes"] += 1
+    if is_terminal(state):
+        return utility(state)
 
+    if maximizing:
+        best = float("-inf")
+        for move in available_moves(state):
+            score = minimax(make_move(state, move, "X"), False, counter)
+            best = max(best, score)
+        return best
+    else:
+        best = float("-inf")
+        for move in available_moves(state):
+            score = minimax(make_move(state, move, "0"), True, counter)
+            best = min(best, score)
+        return best
+        
 
 # --------------------------------------------------
 # TASK 4 AND 5 — BEST MOVE
