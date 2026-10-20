@@ -67,7 +67,7 @@ def print_board(state):
 
 def available_moves(state):
     """Return indices of empty cells (0 through 8)."""
-    return [i for i, cell in enumerate(state) if cell == ""]
+    return [i for i, cell in enumerate(state) if cell == " "]
 
 
 # --------------------------------------------------
@@ -118,7 +118,7 @@ def utility(state):
     winner = check_winner(state)
     if winner == "X":
         return 1
-    if winner == "0":
+    if winner == "O":
         return -1
     return 0
 
@@ -144,9 +144,9 @@ def minimax(state, maximizing, counter):
             best = max(best, score)
         return best
     else:
-        best = float("-inf")
+        best = float("inf")
         for move in available_moves(state):
-            score = minimax(make_move(state, move, "0"), True, counter)
+            score = minimax(make_move(state, move, "O"), True, counter)
             best = min(best, score)
         return best
         
@@ -160,10 +160,18 @@ def best_move(state, counter):
 
     Count nodes in recursive Minimax searches. Ties use first move.
     """
-    # TODO: Try each legal X move, call minimax() for O's turn,
-    # and return the move with the highest score.
-    # If the board is terminal, return None.
-    pass
+    if is_terminal(state):
+        return None
+    best_score = float("-inf")
+    chosen = None
+    for move in available_moves(state):
+
+        score = minimax(make_move(state, move, "X"), False, counter)
+        if score > best_score:
+
+            best_score = score
+            chosen = move
+    return chosen
 
 
 # --------------------------------------------------
@@ -176,12 +184,27 @@ def alpha_beta(state, maximizing, alpha, beta, counter):
     alpha = best score MAX can guarantee so far.
     beta  = best score MIN can guarantee so far.
     """
-    # TODO: Adapt minimax():
-    # - MAX updates alpha; MIN updates beta.
-    # - Stop exploring remaining moves if alpha >= beta.
-    # - Count visited nodes exactly as in minimax().
-    pass
+    counter["nodes"] += 1
+    if is_terminal(state):
+        return utility(state)
 
+    if maximizing:
+        value = float("-inf")
+        for move in available_moves(state):
+            value = max(value, alpha_beta(make_move(state, move, "X"), False, alpha, beta, counter))
+
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                break
+        return value
+    else:
+        value = float("inf")
+        for move in available_moves(state):
+            value = min(value, alpha_beta(make_move(state, move, "O"), True, alpha, beta, counter))
+            beta = min(beta, value)
+            if alpha >= beta:
+                break
+        return value
 
 # --------------------------------------------------
 # TASK 6 — BEST MOVE WITH ALPHA-BETA
@@ -189,10 +212,20 @@ def alpha_beta(state, maximizing, alpha, beta, counter):
 
 def best_move_alpha_beta(state, counter):
     """Return the best move index for X using Alpha-Beta search."""
-    # TODO: Like best_move(), but call alpha_beta().
-    # Start alpha at -infinity and beta at +infinity.
-    # Update alpha after each candidate X move.
-    pass
+    if is_terminal(state):
+        return None
+    best_score = float("-inf")
+    chosen = None
+    alpha = float("-inf")
+    beta = float("inf")
+    for move in available_moves(state):
+        score = alpha_beta(make_move(state, move, "X"),
+                           False, alpha, beta, counter)
+        if score > best_score:
+            best_score = score
+            chosen = move
+        alpha = max(alpha, best_score)         # tighten MAX's guarantee
+    return chosen
 
 
 # --------------------------------------------------
